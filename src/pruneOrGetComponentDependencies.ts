@@ -56,7 +56,7 @@ export function pruneOrGetComponentDependencies(context: WLECleanerContext, prop
 
             isDefault = true;
             for (let i = 0; i < expectedLen; i++) {
-                if (arr[0] !== propConfig.default[i]) {
+                if (arr[i] !== propConfig.default[i]) {
                     isDefault = false;
                     break;
                 }
