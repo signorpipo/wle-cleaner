@@ -4,7 +4,7 @@ import { customCollisionExtentsOptsType, customCollisionRadiusOptsType, customOp
 import { type ModifiedComponentPropertyRecord } from './ModifiedComponentProperty.js';
 import { type WLECleanerContext } from './WLECleanerContext.js';
 
-export function pruneOrGetComponentDependencies(context: WLECleanerContext, properties: ModifiedComponentPropertyRecord, compType: string, objectName: string, tkComponentProperties: ObjectToken, propKey: string, tkPropValue: JSONValueToken) {
+export function pruneOrGetComponentDependencies(context: WLECleanerContext, properties: ModifiedComponentPropertyRecord, compType: string, objectName: string, tkComponentProperties: ObjectToken, propKey: string, tkPropValue: JSONValueToken, throwOnUnexpected: boolean) {
     // TODO only remove defaults if --prune-defaults is used
     const propConfig = properties[propKey];
     if (propConfig === undefined) {
@@ -45,9 +45,17 @@ export function pruneOrGetComponentDependencies(context: WLECleanerContext, prop
         // TODO track dependency
     } else if (propConfig.type === Type.Skin) {
         // TODO track dependency
-    } else if (propConfig.type === Type.Color || propConfig.type === customOpaqueColorType || propConfig.type === customVec3Type || propConfig.type === customVec4Type) {
+    } else if (
+        propConfig.type === Type.Color ||
+        propConfig.type === customVec4Type ||
+        propConfig.type === customOpaqueColorType ||
+        propConfig.type === customVec3Type ||
+        propConfig.type === Type.Vector2 ||
+        propConfig.type === Type.Vector3 ||
+        propConfig.type === Type.Vector4) {
         if (canPruneDefault) {
-            const expectedLen = (propConfig.type === Type.Color || propConfig.type === customVec4Type) ? 4 : 3;
+            const expectedLen = (propConfig.type === Type.Color || propConfig.type === customVec4Type || propConfig.type === Type.Vector4) ? 4 :
+                ((propConfig.type === customVec3Type || propConfig.type === customOpaqueColorType || propConfig.type === Type.Vector3) ? 3 : 2);
             const arr = ArrayToken.assert(tkPropValue).evaluate();
 
             if (arr.length !== expectedLen) {
@@ -72,13 +80,21 @@ export function pruneOrGetComponentDependencies(context: WLECleanerContext, prop
         // TODO track dependency
 
         // TODO prune default
+    } else if (propConfig.type === Type.ParticleEffect) {
+        // TODO
+    } else if (propConfig.type === Type.Array) {
+        // TODO
+    } else if (propConfig.type === Type.Record) {
+        // TODO
     } else if (propConfig.type !== Type.Object) {
-        let typeIDName: string | unknown = propConfig.type;
-        if (typeof typeIDName !== 'string') {
-            typeIDName = `<internal wle-cleaner ID (${String(typeIDName)})>`;
-        }
+        if (throwOnUnexpected) {
+            let typeIDName: string | unknown = propConfig.type;
+            if (typeof typeIDName !== 'string') {
+                typeIDName = `<internal wle-cleaner ID (${String(typeIDName)})>`;
+            }
 
-        throw new Error(`Unexpected property type ID "${typeIDName}" for component property "${propKey}" from component with type "${compType}" from object with name "${objectName}"`);
+            throw new Error(`Unexpected property type ID "${typeIDName}" for component property "${propKey}" from component with type "${compType}" from object with name "${objectName}"`);
+        }
     }
 
     if (isDefault) {
