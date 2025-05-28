@@ -45,9 +45,17 @@ export function pruneOrGetComponentDependencies(context: WLECleanerContext, prop
         // TODO track dependency
     } else if (propConfig.type === Type.Skin) {
         // TODO track dependency
-    } else if (propConfig.type === Type.Color || propConfig.type === customOpaqueColorType || propConfig.type === customVec3Type || propConfig.type === customVec4Type) {
+    } else if (
+        propConfig.type === Type.Color ||
+        propConfig.type === customVec4Type ||
+        propConfig.type === customOpaqueColorType ||
+        propConfig.type === customVec3Type ||
+        propConfig.type === Type.Vector2 ||
+        propConfig.type === Type.Vector3 ||
+        propConfig.type === Type.Vector4) {
         if (canPruneDefault) {
-            const expectedLen = (propConfig.type === Type.Color || propConfig.type === customVec4Type) ? 4 : 3;
+            const expectedLen = (propConfig.type === Type.Color || propConfig.type === customVec4Type || propConfig.type === Type.Vector4) ? 4 :
+                ((propConfig.type === customVec3Type || propConfig.type === customOpaqueColorType || propConfig.type === Type.Vector3) ? 3 : 2);
             const arr = ArrayToken.assert(tkPropValue).evaluate();
 
             if (arr.length !== expectedLen) {
@@ -72,6 +80,12 @@ export function pruneOrGetComponentDependencies(context: WLECleanerContext, prop
         // TODO track dependency
 
         // TODO prune default
+    } else if (propConfig.type === Type.ParticleEffect) {
+        // TODO
+    } else if (propConfig.type === Type.Array) {
+        // TODO
+    } else if (propConfig.type === Type.Record) {
+        // TODO
     } else if (propConfig.type !== Type.Object) {
         let typeIDName: string | unknown = propConfig.type;
         if (typeof typeIDName !== 'string') {
