@@ -26,7 +26,7 @@ import { pruneOrGetComponentDependencies } from './pruneOrGetComponentDependenci
  * check order: setting, object, animation, skin, mesh, font, language, material, texture, image, pipeline, shader, file
  */
 
-export async function cleanupSingleProject(path: string, outputPath: string, editorBundlePath: string, editorBundleExtraPath: string | null, throwOnUnexpected: boolean): Promise<void> {
+export async function cleanupSingleProject(path: string, outputPath: string, editorBundlePath: string, editorBundleExtraPath: string | null) {
     // TODO dependency pruning
 
     // get bundle components
@@ -231,7 +231,7 @@ export async function cleanupSingleProject(path: string, outputPath: string, edi
                             const tkComponentProperties = ObjectToken.assert(tkValue);
                             for (const [propKey, tkPropValue] of tkComponentProperties.getTokenEntries()) {
                                 // FIXME should ! not be used here?
-                                pruneOrGetComponentDependencies(context, bundleComponents.get(compKey)!, compKey, objectName, tkComponentProperties, propKey, tkPropValue, throwOnUnexpected);
+                                pruneOrGetComponentDependencies(context, bundleComponents.get(compKey)!, compKey, objectName, tkComponentProperties, propKey, tkPropValue);
                             }
                         }
                     } else {
@@ -273,7 +273,7 @@ export async function cleanupSingleProject(path: string, outputPath: string, edi
                         // default or invalid key
                         const tkComponentProperties = ObjectToken.assert(tkValue);
                         for (const [propKey, tkPropValue] of tkComponentProperties.getTokenEntries()) {
-                            pruneOrGetComponentDependencies(context, properties, compType, objectName, tkComponentProperties, propKey, tkPropValue, throwOnUnexpected);
+                            pruneOrGetComponentDependencies(context, properties, compType, objectName, tkComponentProperties, propKey, tkPropValue);
                         }
                     } else {
                         // properties for component that is no longer the

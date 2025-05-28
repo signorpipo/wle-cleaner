@@ -4,7 +4,7 @@ import { customCollisionExtentsOptsType, customCollisionRadiusOptsType, customOp
 import { type ModifiedComponentPropertyRecord } from './ModifiedComponentProperty.js';
 import { type WLECleanerContext } from './WLECleanerContext.js';
 
-export function pruneOrGetComponentDependencies(context: WLECleanerContext, properties: ModifiedComponentPropertyRecord, compType: string, objectName: string, tkComponentProperties: ObjectToken, propKey: string, tkPropValue: JSONValueToken, throwOnUnexpected: boolean) {
+export function pruneOrGetComponentDependencies(context: WLECleanerContext, properties: ModifiedComponentPropertyRecord, compType: string, objectName: string, tkComponentProperties: ObjectToken, propKey: string, tkPropValue: JSONValueToken) {
     // TODO only remove defaults if --prune-defaults is used
     const propConfig = properties[propKey];
     if (propConfig === undefined) {
@@ -87,14 +87,12 @@ export function pruneOrGetComponentDependencies(context: WLECleanerContext, prop
     } else if (propConfig.type === Type.Record) {
         // TODO
     } else if (propConfig.type !== Type.Object) {
-        if (throwOnUnexpected) {
-            let typeIDName: string | unknown = propConfig.type;
-            if (typeof typeIDName !== 'string') {
-                typeIDName = `<internal wle-cleaner ID (${String(typeIDName)})>`;
-            }
-
-            throw new Error(`Unexpected property type ID "${typeIDName}" for component property "${propKey}" from component with type "${compType}" from object with name "${objectName}"`);
+        let typeIDName: string | unknown = propConfig.type;
+        if (typeof typeIDName !== 'string') {
+            typeIDName = `<internal wle-cleaner ID (${String(typeIDName)})>`;
         }
+
+        throw new Error(`Unexpected property type ID "${typeIDName}" for component property "${propKey}" from component with type "${compType}" from object with name "${objectName}"`);
     }
 
     if (isDefault) {
