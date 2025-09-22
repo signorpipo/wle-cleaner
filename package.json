@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@playkostudios/wle-cleaner",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Wonderland Engine project file cleanup utility",
   "main": "dist/index.js",
   "files": [
