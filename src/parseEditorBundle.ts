@@ -14,8 +14,14 @@ function _registerEditor(regExports) {
             if (possibleComponent.Properties) {
                 for (const [propName, propType] of Object.entries(possibleComponent.Properties)) {
                     properties[propName] = propType;
+                    
+                    if(properties[propName].record != null) {
+                        // TODO support records
+                        properties[propName].record = properties[propName].record.name;
+                    }
                 }
             }
+
             __marshalled__registerEditor(typeName, properties);
         }
     }
