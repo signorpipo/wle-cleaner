@@ -34,15 +34,15 @@
     "url": "https://github.com/playkostudios/wle-cleaner.git"
   },
   "devDependencies": {
-    "@types/node": "^20.1.4",
+    "@types/node": "^24.5.2",
     "@wonderlandengine/api": "~1.4.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@playkostudios/jsonc-ast": "^0.1.5",
-    "commander": "^12.1.0",
-    "glob": "^11.0.0",
-    "isolated-vm": "^5.0.1"
+    "@playkostudios/jsonc-ast": "^0.2.1",
+    "commander": "^14.0.1",
+    "glob": "^11.0.3",
+    "isolated-vm": "^6.0.1"
   },
   "peerDependencies": {
     "@wonderlandengine/api": "~1.4.0"
