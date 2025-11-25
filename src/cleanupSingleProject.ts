@@ -228,7 +228,13 @@ export async function cleanupSingleProject(path: string, outputPath: string, edi
                                 continue;
                             }
 
-                            const tkComponentProperties = ObjectToken.assert(tkValue);
+                            let tkComponentProperties: ObjectToken | null;
+                            try {
+                                tkComponentProperties = ObjectToken.assert(tkValue);
+                            } catch (error) {
+                                continue;
+                            }
+
                             for (const [propKey, tkPropValue] of tkComponentProperties.getTokenEntries()) {
                                 // FIXME should ! not be used here?
                                 pruneOrGetComponentDependencies(context, bundleComponents.get(compKey)!, compKey, objectName, tkComponentProperties, propKey, tkPropValue);
